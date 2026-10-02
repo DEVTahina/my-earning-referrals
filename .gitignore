@@ -2,4 +2,13 @@ node_modules
 dist
 *.local
 .DS_Store
+
 docs
+# Variables d'environnement (valeurs locales / Measurement ID)
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Artefacts de build TypeScript
+tsconfig.tsbuildinfo
