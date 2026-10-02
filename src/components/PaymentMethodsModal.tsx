@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { motion } from "motion/react";
 import { ArrowUpRight, CreditCard, ExternalLink, X } from "lucide-react";
 import { WALLET_LINK_METHODS } from "../data/platforms";
+import { trackWalletClick } from "../lib/analytics";
 
 /**
  * Modal "Méthodes de paiement" — identique sur toutes les cards :
@@ -79,6 +80,7 @@ export default function PaymentMethodsModal({ onClose }: { onClose: () => void }
                 rel="noopener noreferrer"
                 className="pmodal__item pmodal__item--link"
                 aria-label={`${method.name} — ouvrir dans un nouvel onglet`}
+                onClick={() => trackWalletClick(method, "payment_methods_modal", method.referralUrl)}
               >
                 {method.logo ? (
                   <span className="pmodal__logo" aria-hidden="true">

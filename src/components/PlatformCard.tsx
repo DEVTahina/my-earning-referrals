@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Check, CreditCard, Flame, Info, Star } from "lucide-react";
 import type { Platform } from "../data/platforms";
+import { trackReferralClick } from "../lib/analytics";
 import PaymentMethodsModal from "./PaymentMethodsModal";
 
 /** Avatar de repli (initiale) si aucun logo n'est disponible. */
@@ -119,6 +120,7 @@ export default function PlatformCard({ platform }: { platform: Platform }) {
           rel="noopener noreferrer"
           className="btn btn--primary pcard__cta"
           aria-label={`Commencer à gagner avec ${platform.name} (nouvel onglet)`}
+          onClick={() => trackReferralClick(platform, "platform_card", platform.referralUrl)}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.97 }}
         >

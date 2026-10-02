@@ -26,6 +26,7 @@ import GuideSteps from "../components/guide/GuideSteps";
 import GuideFaqList from "../components/guide/GuideFaqList";
 import GuideCallouts from "../components/guide/GuideCallouts";
 import { usePageMeta } from "../hooks/usePageMeta";
+import { trackReferralClick } from "../lib/analytics";
 
 const formatDate = (iso: string) =>
   new Date(`${iso}T00:00:00`).toLocaleDateString("fr-FR", {
@@ -371,6 +372,7 @@ export default function PlatformDetails() {
       target="_blank"
       rel="noopener noreferrer"
       className="btn btn--primary btn--lg"
+      onClick={() => trackReferralClick(platform, "platform_details", platform.referralUrl)}
       whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.97 }}
     >
