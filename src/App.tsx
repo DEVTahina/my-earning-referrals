@@ -5,12 +5,26 @@ import Home from "./pages/Home";
 import PlatformDetails from "./pages/PlatformDetails";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import { trackPageView } from "./lib/analytics";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
   }, [pathname]);
+  return null;
+}
+
+/**
+ * Analytics : un seul page_view par navigation (SPA).
+ * Placé APRÈS <Routes> pour que le title de la page (SEO) soit déjà à jour.
+ * Les query parameters (UTM) sont conservés dans l'URL mesurée.
+ */
+function AnalyticsRouteTracker() {
+  const { pathname, search } = useLocation();
+  useEffect(() => {
+    trackPageView(`${pathname}${search}`);
+  }, [pathname, search]);
   return null;
 }
 
@@ -35,6 +49,7 @@ export default function App() {
           <Route path="/platforms/:id" element={<GuidePage />} />
           <Route path="*" element={<Home />} />
         </Routes>
+        <AnalyticsRouteTracker />
       </BrowserRouter>
     </MotionConfig>
   );
