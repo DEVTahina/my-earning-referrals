@@ -16,6 +16,8 @@ import { faucetpayGuide } from "./faucetpay";
 import { binanceGuide } from "./binance";
 import { honeygainGuide } from "./honeygain";
 import { luckywatchGuide } from "./luckywatch";
+import { blockbusterGuide } from "./blockbuster";
+import { glowLiveGuide } from "./glowlive";
 
 export type {
   Guides,
@@ -54,6 +56,8 @@ export const guides: Guides = {
   binance: binanceGuide,
   honeygain: honeygainGuide,
   luckywatch: luckywatchGuide,
+  playbb: blockbusterGuide,
+  biubiuclub: glowLiveGuide,
 };
 
 export default guides;

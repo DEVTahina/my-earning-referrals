@@ -13,6 +13,8 @@ import faucetpayLogo from "../assets/images/logos/faucetpay.png";
 import binanceLogo from "../assets/images/logos/binance.png";
 import honeygainLogo from "../assets/images/logos/honeygain.png";
 import luckywatchLogo from "../assets/images/logos/luckywatch.png";
+import blockbusterLogo from "../assets/images/logos/blockbuster.png";
+import glowliveLogo from "../assets/images/logos/glowlive.png";
 
 export type PlatformCategory = "website" | "mobile";
 
@@ -417,5 +419,41 @@ export const platforms: Platform[] = [
     ],
     rewardType: null,
     tags: ["Watch", "Mobile", "Rewards"],
+  },
+
+  {
+    id: "playbb",
+    name: "Blockbuster",
+    category: "mobile",
+    subtitle: "Puzzle & Social",
+    description:
+      "Jeu de puzzle mobile (« block-matching ») avec classements, invitations récompensées, chat privé et cadeaux virtuels.",
+    referralUrl: "https://playbb.fun/u/28528362",
+    logo: blockbusterLogo,
+    highlights: [
+      "Déplacez, faites pivoter et retournez les blocs",
+      "Invitez des amis et recevez des gems",
+      "Version web jouable sans installation",
+    ],
+    rewardType: null,
+    tags: ["Puzzle", "Games", "Social"],
+  },
+
+  {
+    id: "biubiuclub",
+    name: "Glow Live",
+    category: "mobile",
+    subtitle: "Voice Chat & Party",
+    description:
+      "Application de chat vocal en groupe et de divertissement : salons, jeux entre amis, cadeaux et programme d'invitation.",
+    referralUrl: "https://app.biubiuclub.com/invite/v2?r=8J6E23&ticket=",
+    logo: glowliveLogo,
+    highlights: [
+      "Salons de groupe en temps réel (voix et texte)",
+      "Jeux et activités vocales entre amis",
+      "Invitez des amis et suivez vos récompenses",
+    ],
+    rewardType: null,
+    tags: ["Voice Chat", "Party", "Social"],
   },
 ];
