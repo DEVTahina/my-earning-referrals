@@ -3,8 +3,10 @@ import { Flame } from "lucide-react";
 import { platforms } from "../data/platforms";
 import PlatformCard from "./PlatformCard";
 import FadeIn from "./FadeIn";
+import { useLanguage } from "../hooks/useLanguage";
 
 export default function FeaturedSection() {
+  const { t } = useLanguage();
   const featured = platforms.filter((p) => p.featured);
 
   if (featured.length === 0) return null;
@@ -15,11 +17,11 @@ export default function FeaturedSection() {
         <FadeIn className="section__head">
           <span className="section__eyebrow">
             <Flame size={14} />
-            Sélection
+            {t("featured.eyebrow")}
           </span>
-          <h2 className="section__title">Plateformes recommandées</h2>
+          <h2 className="section__title">{t("featured.title")}</h2>
           <p className="section__subtitle">
-            Une sélection de plateformes à découvrir parmi celles présentées.
+            {t("featured.subtitle")}
           </p>
         </FadeIn>
 

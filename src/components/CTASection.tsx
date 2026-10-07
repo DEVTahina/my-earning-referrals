@@ -1,7 +1,9 @@
 import { motion } from "motion/react";
 import { ArrowDown, Rocket } from "lucide-react";
+import { useLanguage } from "../hooks/useLanguage";
 
 export default function CTASection() {
+  const { t } = useLanguage();
   const scrollToPlatforms = () => {
     document.getElementById("plateformes")?.scrollIntoView({ behavior: "smooth" });
   };
@@ -16,10 +18,9 @@ export default function CTASection() {
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.6, ease: [0.21, 0.65, 0.36, 1] }}
         >
-          <h2 className="cta__title">Prêt à commencer ?</h2>
+          <h2 className="cta__title">{t("cta.title")}</h2>
           <p className="cta__text">
-            Découvrez les plateformes disponibles et choisissez celle qui vous
-            convient.
+            {t("cta.text")}
           </p>
           <motion.button
             type="button"
@@ -29,7 +30,7 @@ export default function CTASection() {
             whileTap={{ scale: 0.97 }}
           >
             <Rocket size={18} />
-            Voir les plateformes
+            {t("cta.seePlatforms")}
             <ArrowDown size={16} />
           </motion.button>
         </motion.div>

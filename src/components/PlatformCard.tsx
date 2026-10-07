@@ -5,6 +5,8 @@ import { ArrowRight, Check, CreditCard, Flame, Info, Star } from "lucide-react";
 import type { Platform } from "../data/platforms";
 import { trackReferralClick } from "../lib/analytics";
 import PaymentMethodsModal from "./PaymentMethodsModal";
+import { useLanguage } from "../hooks/useLanguage";
+import { localizePlatform } from "../i18n/localize";
 
 /** Avatar de repli (initiale) si aucun logo n'est disponible. */
 function LogoFallback({ name }: { name: string }) {
@@ -24,7 +26,9 @@ function LogoFallback({ name }: { name: string }) {
   );
 }
 
-export default function PlatformCard({ platform }: { platform: Platform }) {
+export default function PlatformCard({ platform: raw }: { platform: Platform }) {
+  const { lang, t } = useLanguage();
+  const platform = localizePlatform(raw, lang);
   const [logoError, setLogoError] = useState(false);
   const [showPayments, setShowPayments] = useState(false);
   const hasLink = Boolean(platform.referralUrl);
@@ -39,7 +43,7 @@ export default function PlatformCard({ platform }: { platform: Platform }) {
       {platform.featured && (
         <span className="pcard__featured-badge">
           <Star size={12} />
-          À la une
+          {t("card.featured")}
         </span>
       )}
 
@@ -50,7 +54,7 @@ export default function PlatformCard({ platform }: { platform: Platform }) {
           ) : (
             <img
               src={platform.logo ?? undefined}
-              alt={`Logo ${platform.name}`}
+              alt={t("card.logoAlt", { name: platform.name })}
               className="pcard__logo-img"
               loading="lazy"
               onError={() => setLogoError(true)}
@@ -99,12 +103,12 @@ export default function PlatformCard({ platform }: { platform: Platform }) {
         className="pcard__payments"
         onClick={() => setShowPayments(true)}
         aria-haspopup="dialog"
-        aria-label={`Voir les méthodes de paiement de ${platform.name}`}
+        aria-label={t("card.paymentsAria", { name: platform.name })}
         whileHover={{ scale: 1.01 }}
         whileTap={{ scale: 0.98 }}
       >
         <CreditCard size={14} aria-hidden="true" />
-        Méthodes de paiement
+        {t("card.payments")}
       </motion.button>
 
       <AnimatePresence>
@@ -119,27 +123,27 @@ export default function PlatformCard({ platform }: { platform: Platform }) {
           target="_blank"
           rel="noopener noreferrer"
           className="btn btn--primary pcard__cta"
-          aria-label={`Commencer à gagner avec ${platform.name} (nouvel onglet)`}
+          aria-label={t("card.startAria", { name: platform.name })}
           onClick={() => trackReferralClick(platform, "platform_card", platform.referralUrl)}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.97 }}
         >
-          Commencer à gagner
+          {t("cta.start")}
           <ArrowRight size={16} />
         </motion.a>
       ) : (
         <button type="button" className="btn pcard__cta pcard__cta--disabled" disabled>
-          Bientôt disponible
+          {t("cta.soon")}
         </button>
       )}
 
       <Link
         to={`/platforms/${platform.id}`}
         className="pcard__about"
-        aria-label={`En savoir plus sur ${platform.name}`}
+        aria-label={t("card.aboutAria", { name: platform.name })}
       >
         <Info size={14} />
-        À propos
+        {t("card.about")}
       </Link>
     </motion.article>
   );

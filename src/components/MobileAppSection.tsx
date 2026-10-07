@@ -3,8 +3,10 @@ import { Smartphone } from "lucide-react";
 import { platforms } from "../data/platforms";
 import MobileAppCard from "./MobileAppCard";
 import FadeIn from "./FadeIn";
+import { useLanguage } from "../hooks/useLanguage";
 
 export default function MobileAppSection() {
+  const { t } = useLanguage();
   const mobileApps = platforms.filter((p) => p.category === "mobile");
 
   return (
@@ -15,10 +17,9 @@ export default function MobileAppSection() {
             <Smartphone size={14} />
             Mobile
           </span>
-          <h2 className="section__title">Applications mobiles</h2>
+          <h2 className="section__title">{t("apps.title")}</h2>
           <p className="section__subtitle">
-            Des applications à installer sur votre smartphone pour gagner où que
-            vous soyez.
+            {t("apps.subtitle")}
           </p>
         </FadeIn>
 

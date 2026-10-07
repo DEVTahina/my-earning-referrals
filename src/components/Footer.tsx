@@ -1,14 +1,18 @@
 import { siteConfig } from "../data/platforms";
 import { Zap } from "lucide-react";
-
-const navLinks = [
-  { label: "Accueil", href: "#accueil" },
-  { label: "Plateformes", href: "#plateformes" },
-  { label: "Applications", href: "#applications" },
-  { label: "Comment ça marche", href: "#comment-ca-marche" },
-];
+import { useLanguage } from "../hooks/useLanguage";
+import { localizeSiteConfig } from "../i18n/localize";
 
 export default function Footer() {
+  const { lang, t } = useLanguage();
+  const config = localizeSiteConfig(lang);
+  const navLinks = [
+    { label: t("nav.home"), href: "#accueil" },
+    { label: t("nav.platforms"), href: "#plateformes" },
+    { label: t("nav.apps"), href: "#applications" },
+    { label: t("nav.how"), href: "#comment-ca-marche" },
+  ];
+
   return (
     <footer className="footer">
       <div className="container">
@@ -20,10 +24,10 @@ export default function Footer() {
               </span>
               {siteConfig.name}
             </a>
-            <p className="footer__description">{siteConfig.tagline}</p>
+            <p className="footer__description">{config.tagline}</p>
           </div>
 
-          <nav className="footer__nav" aria-label="Navigation pied de page">
+          <nav className="footer__nav" aria-label={t("nav.ariaFooter")}>
             {navLinks.map((link) => (
               <a key={link.href} href={link.href} className="footer__link">
                 {link.label}
@@ -32,7 +36,7 @@ export default function Footer() {
           </nav>
 
           <div className="footer__socials">
-            {siteConfig.socials.map((social) =>
+            {config.socials.map((social) =>
               social.url ? (
                 <a
                   key={social.label}
@@ -53,9 +57,9 @@ export default function Footer() {
         </div>
 
         <div className="footer__bottom">
-          <p className="footer__disclaimer">{siteConfig.disclaimer}</p>
+          <p className="footer__disclaimer">{config.disclaimer}</p>
           <p className="footer__copy">
-            © {new Date().getFullYear()} {siteConfig.name}. Tous droits réservés.
+            © {new Date().getFullYear()} {siteConfig.name}. {t("footer.copy")}
           </p>
         </div>
       </div>

@@ -17,7 +17,6 @@ import {
   UserRound,
 } from "lucide-react";
 import { platforms } from "../data/platforms";
-import { guides } from "../data/guides";
 import type { PlatformGuide } from "../data/guides";
 import GuideToc from "../components/guide/GuideToc";
 import GuideBlocks from "../components/guide/GuideBlocks";
@@ -27,41 +26,35 @@ import GuideFaqList from "../components/guide/GuideFaqList";
 import GuideCallouts from "../components/guide/GuideCallouts";
 import { usePageMeta } from "../hooks/usePageMeta";
 import { trackReferralClick } from "../lib/analytics";
-
-const formatDate = (iso: string) =>
-  new Date(`${iso}T00:00:00`).toLocaleDateString("fr-FR", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+import { useLanguage } from "../hooks/useLanguage";
+import { getGuide, localizePlatform } from "../i18n/localize";
+import { formatDateLocalized } from "../i18n/types";
 
 export default function PlatformDetails() {
   const { id } = useParams<{ id: string }>();
   const [logoError, setLogoError] = useState(false);
+  const { lang, t } = useLanguage();
 
-  const platform = platforms.find((p) => p.id === id);
-  const guide = id ? guides[id] : undefined;
+  const base = platforms.find((p) => p.id === id);
+  const platform = base ? localizePlatform(base, lang) : undefined;
+  const guide = getGuide(id, lang);
 
   usePageMeta(
-    platform
-      ? `${platform.name} : guide complet, fonctionnement et comment gagner | EarnZone`
-      : "Plateforme introuvable | EarnZone",
-    platform
-      ? `Découvrez comment fonctionne ${platform.name}, comment créer un compte, effectuer les tâches disponibles et comprendre les récompenses.`
-      : "Cette plateforme n'existe pas sur EarnZone."
+    platform ? t("meta.title", { name: platform.name }) : t("meta.notFoundTitle"),
+    platform ? t("meta.description", { name: platform.name }) : t("meta.notFoundDesc")
   );
 
   if (!platform) {
     return (
       <main className="section">
         <div className="container gnotfound">
-          <h1 className="section__title">Plateforme introuvable</h1>
+          <h1 className="section__title">{t("nf.title")}</h1>
           <p className="section__subtitle">
-            Cette plateforme n'existe pas ou a été retirée.
+            {t("nf.text")}
           </p>
           <Link to="/" className="btn btn--primary">
             <ArrowLeft size={16} />
-            Retour à l'accueil
+            {t("nf.back")}
           </Link>
         </div>
       </main>
@@ -81,10 +74,12 @@ export default function PlatformDetails() {
 
     sections.push({
       id: "presentation",
-      label: "Présentation",
+      label: t("s.presentation.label"),
       node: (
         <>
-          <h2 className="gsection__title">Qu'est-ce que {platform.name} ?</h2>
+          <h2 className="gsection__title">
+            {t("s.presentation.title", { name: platform.name })}
+          </h2>
           <p className="gsection__text">{g.whatIsIt}</p>
         </>
       ),
@@ -92,10 +87,12 @@ export default function PlatformDetails() {
 
     sections.push({
       id: "fonctionnement",
-      label: "Fonctionnement",
+      label: t("s.howWorks.label"),
       node: (
         <>
-          <h2 className="gsection__title">Comment fonctionne {platform.name} ?</h2>
+          <h2 className="gsection__title">
+            {t("s.howWorks.title", { name: platform.name })}
+          </h2>
           <p className="gsection__text">{g.howItWorks}</p>
           {g.callouts && g.callouts.length > 0 && <GuideCallouts callouts={g.callouts} />}
         </>
@@ -105,13 +102,12 @@ export default function PlatformDetails() {
     if (g.earningMethods.length > 0) {
       sections.push({
         id: "methodes",
-        label: "Méthodes pour gagner",
+        label: t("s.methods.label"),
         node: (
           <>
-            <h2 className="gsection__title">Les différentes façons de gagner</h2>
+            <h2 className="gsection__title">{t("s.methods.title")}</h2>
             <p className="gsection__intro">
-              Chaque méthode ci-dessous est documentée par la plateforme. Ouvrez un
-              bloc pour voir le détail et les étapes.
+              {t("s.methods.intro")}
             </p>
             <GuideAccordion blocks={g.earningMethods} />
           </>
@@ -122,10 +118,10 @@ export default function PlatformDetails() {
     if (g.features.length > 0) {
       sections.push({
         id: "fonctionnalites",
-        label: "Fonctionnalités",
+        label: t("s.features.label"),
         node: (
           <>
-            <h2 className="gsection__title">Fonctionnalités principales</h2>
+            <h2 className="gsection__title">{t("s.features.title")}</h2>
             <GuideBlocks blocks={g.features} />
           </>
         ),
@@ -135,10 +131,10 @@ export default function PlatformDetails() {
     if (g.registrationSteps.length > 0) {
       sections.push({
         id: "inscription",
-        label: "Créer un compte",
+        label: t("s.signup.label"),
         node: (
           <>
-            <h2 className="gsection__title">Comment créer un compte ?</h2>
+            <h2 className="gsection__title">{t("s.signup.title")}</h2>
             <GuideSteps steps={g.registrationSteps} />
           </>
         ),
@@ -148,11 +144,11 @@ export default function PlatformDetails() {
     if (g.profileSetup && g.profileSetup.length > 0) {
       sections.push({
         id: "profil",
-        label: "Configurer son profil",
+        label: t("s.profile.label"),
         node: (
           <>
             <h2 className="gsection__title">
-              <UserRound size={18} aria-hidden="true" /> Configurer son profil
+              <UserRound size={18} aria-hidden="true" /> {t("s.profile.title")}
             </h2>
             <GuideSteps steps={g.profileSetup} />
           </>
@@ -163,14 +159,14 @@ export default function PlatformDetails() {
     if (g.dashboard && g.dashboard.length > 0) {
       sections.push({
         id: "tableau-de-bord",
-        label: "Le tableau de bord",
+        label: t("s.dashboard.label"),
         node: (
           <>
             <h2 className="gsection__title">
-              <LayoutDashboard size={18} aria-hidden="true" /> Découvrir le tableau de bord
+              <LayoutDashboard size={18} aria-hidden="true" /> {t("s.dashboard.title")}
             </h2>
             <p className="gsection__intro">
-              Les sections réellement présentes sur {platform.name} :
+              {t("s.dashboard.intro", { name: platform.name })}
             </p>
             <GuideBlocks blocks={g.dashboard} />
           </>
@@ -181,11 +177,11 @@ export default function PlatformDetails() {
     if (g.earningGuide.length > 0) {
       sections.push({
         id: "guide",
-        label: "Guide A → Z",
+        label: t("s.guide.label"),
         node: (
           <>
             <h2 className="gsection__title">
-              <ListChecks size={18} aria-hidden="true" /> Guide complet pour débuter
+              <ListChecks size={18} aria-hidden="true" /> {t("s.guide.title")}
             </h2>
             <GuideSteps steps={g.earningGuide} />
           </>
@@ -196,11 +192,11 @@ export default function PlatformDetails() {
     if (g.refusedReasons && g.refusedReasons.length > 0) {
       sections.push({
         id: "refus",
-        label: "Tâche refusée",
+        label: t("s.refused.label"),
         node: (
           <>
             <h2 className="gsection__title">
-              <Ban size={18} aria-hidden="true" /> Pourquoi une tâche peut-elle être refusée ?
+              <Ban size={18} aria-hidden="true" /> {t("s.refused.title")}
             </h2>
             <ul className="glist">
               {g.refusedReasons.map((r) => (
@@ -217,11 +213,11 @@ export default function PlatformDetails() {
 
     sections.push({
       id: "retrait",
-      label: "Retrait",
+      label: t("s.withdraw.label"),
       node: (
         <>
           <h2 className="gsection__title">
-            <Coins size={18} aria-hidden="true" /> Comment retirer ses récompenses ?
+            <Coins size={18} aria-hidden="true" /> {t("s.withdraw.title")}
           </h2>
           <p className="gsection__text">{g.withdrawal.description}</p>
           {g.withdrawal.steps && g.withdrawal.steps.length > 0 && (
@@ -247,12 +243,12 @@ export default function PlatformDetails() {
             <div className="gmeta">
               {g.withdrawal.minimum && (
                 <p className="gmeta__line">
-                  <strong>Seuil minimum :</strong> {g.withdrawal.minimum}
+                  <strong>{t("s.withdraw.min")} :</strong> {g.withdrawal.minimum}
                 </p>
               )}
               {g.withdrawal.processingTime && (
                 <p className="gmeta__line">
-                  <strong>Délai :</strong> {g.withdrawal.processingTime}
+                  <strong>{t("s.withdraw.delay")} :</strong> {g.withdrawal.processingTime}
                 </p>
               )}
             </div>
@@ -264,11 +260,11 @@ export default function PlatformDetails() {
     if (g.conditions && g.conditions.length > 0) {
       sections.push({
         id: "conditions",
-        label: "Règles importantes",
+        label: t("s.rules.label"),
         node: (
           <>
             <h2 className="gsection__title">
-              <ShieldAlert size={18} aria-hidden="true" /> Règles importantes
+              <ShieldAlert size={18} aria-hidden="true" /> {t("s.rules.title")}
             </h2>
             <ul className="glist">
               {g.conditions.map((c) => (
@@ -286,11 +282,11 @@ export default function PlatformDetails() {
     if (g.mistakes && g.mistakes.length > 0) {
       sections.push({
         id: "erreurs",
-        label: "Erreurs à éviter",
+        label: t("s.mistakes.label"),
         node: (
           <>
             <h2 className="gsection__title">
-              <TriangleAlert size={18} aria-hidden="true" /> Erreurs à éviter
+              <TriangleAlert size={18} aria-hidden="true" /> {t("s.mistakes.title")}
             </h2>
             <div className="gblocks">
               {g.mistakes.map((m) => (
@@ -308,11 +304,11 @@ export default function PlatformDetails() {
     if (g.tips && g.tips.length > 0) {
       sections.push({
         id: "conseils",
-        label: "Comment gagner plus",
+        label: t("s.tips.label"),
         node: (
           <>
             <h2 className="gsection__title">
-              <Lightbulb size={18} aria-hidden="true" /> Comment gagner plus (sans promesse)
+              <Lightbulb size={18} aria-hidden="true" /> {t("s.tips.title")}
             </h2>
             <ul className="glist">
               {g.tips.map((t) => (
@@ -323,9 +319,7 @@ export default function PlatformDetails() {
               ))}
             </ul>
             <p className="gsection__note">
-              Aucun montant n'est garanti : vos gains dépendent des tâches
-              disponibles, de votre pays, de votre profil et des conditions de la
-              plateforme.
+              {t("s.tips.note")}
             </p>
           </>
         ),
@@ -335,11 +329,11 @@ export default function PlatformDetails() {
     if (g.referral) {
       sections.push({
         id: "parrainage",
-        label: "Parrainage",
+        label: t("s.referral.label"),
         node: (
           <>
             <h2 className="gsection__title">
-              <Sparkles size={18} aria-hidden="true" /> Le programme de parrainage
+              <Sparkles size={18} aria-hidden="true" /> {t("s.referral.title")}
             </h2>
             <p className="gsection__text">{g.referral.description}</p>
           </>
@@ -350,10 +344,10 @@ export default function PlatformDetails() {
     if (g.faq && g.faq.length > 0) {
       sections.push({
         id: "faq",
-        label: "FAQ",
+        label: t("s.faq.label"),
         node: (
           <>
-            <h2 className="gsection__title">Questions fréquentes</h2>
+            <h2 className="gsection__title">{t("s.faq.title")}</h2>
             <GuideFaqList items={g.faq} />
           </>
         ),
@@ -376,12 +370,12 @@ export default function PlatformDetails() {
       whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.97 }}
     >
-      Commencer à gagner
+      {t("cta.start")}
       <ArrowRight size={18} />
     </motion.a>
   ) : (
     <button type="button" className="btn btn--lg" disabled>
-      Bientôt disponible
+      {t("cta.soon")}
     </button>
   );
 
@@ -397,7 +391,7 @@ export default function PlatformDetails() {
           >
             <Link to="/" className="ghero__back">
               <ArrowLeft size={15} />
-              Retour aux plateformes
+              {t("details.back")}
             </Link>
 
             <div className="ghero__head">
@@ -435,7 +429,7 @@ export default function PlatformDetails() {
                   onClick={() => scrollTo("guide")}
                 >
                   <ListChecks size={18} />
-                  Voir le guide A → Z
+                  {t("details.seeGuide")}
                 </button>
               )}
             </div>
@@ -452,7 +446,9 @@ export default function PlatformDetails() {
               {guide.lastVerified && (
                 <p className="gverified">
                   <CalendarCheck size={13} aria-hidden="true" />
-                  Informations vérifiées le {formatDate(guide.lastVerified)}
+                  {t("details.verified", {
+                    date: formatDateLocalized(guide.lastVerified, lang),
+                  })}
                 </p>
               )}
             </aside>
@@ -467,21 +463,18 @@ export default function PlatformDetails() {
               {guide.docCoverage === "partial" && (
                 <p className="gcoverage">
                   <Info size={14} aria-hidden="true" />
-                  Documentation officielle limitée : ce guide ne décrit que ce qui a
-                  pu être vérifié sur les sources publiques de la plateforme.
+                  {t("details.coverage")}
                 </p>
               )}
 
               <div className="gfinal">
-                <h2 className="gfinal__title">Prêt à essayer {platform.name} ?</h2>
+                <h2 className="gfinal__title">
+                  {t("details.finalTitle", { name: platform.name })}
+                </h2>
                 {cta}
                 <p className="gfinal__note">
                   <Info size={13} />
-                  Les fonctionnalités, tâches, récompenses, méthodes de paiement et
-                  conditions peuvent évoluer. Vérifiez toujours les informations
-                  actuelles sur la plateforme officielle. Les gains ne sont pas
-                  garantis : ils dépendent des tâches disponibles, de votre pays, de
-                  votre profil et de votre activité.
+                  {t("details.finalNote")}
                 </p>
               </div>
             </div>
@@ -494,7 +487,9 @@ export default function PlatformDetails() {
         <section className="section">
           <div className="container">
             <div className="gfinal">
-              <h2 className="gfinal__title">Prêt à essayer {platform.name} ?</h2>
+              <h2 className="gfinal__title">
+                {t("details.finalTitle", { name: platform.name })}
+              </h2>
               {cta}
             </div>
           </div>

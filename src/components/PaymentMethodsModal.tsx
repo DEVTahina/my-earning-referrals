@@ -2,8 +2,9 @@ import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion } from "motion/react";
 import { ArrowUpRight, CreditCard, ExternalLink, X } from "lucide-react";
-import { WALLET_LINK_METHODS } from "../data/platforms";
 import { trackWalletClick } from "../lib/analytics";
+import { useLanguage } from "../hooks/useLanguage";
+import { localizeWalletMethods } from "../i18n/localize";
 
 /**
  * Modal "Méthodes de paiement" — identique sur toutes les cards :
@@ -12,6 +13,8 @@ import { trackWalletClick } from "../lib/analytics";
  */
 export default function PaymentMethodsModal({ onClose }: { onClose: () => void }) {
   const closeRef = useRef<HTMLButtonElement>(null);
+  const { lang, t } = useLanguage();
+  const methods = localizeWalletMethods(lang);
 
   // Fermeture avec Escape + focus initial sur le bouton fermer.
   useEffect(() => {
@@ -54,32 +57,32 @@ export default function PaymentMethodsModal({ onClose }: { onClose: () => void }
         <div className="pmodal__head">
           <h4 className="pmodal__title" id="pmodal-title">
             <CreditCard size={16} aria-hidden="true" />
-            Méthodes de paiement
+            {t("card.payments")}
           </h4>
           <button
             type="button"
             ref={closeRef}
             className="pmodal__close"
             onClick={onClose}
-            aria-label="Fermer le modal des méthodes de paiement"
+            aria-label={t("modal.closeAria")}
           >
             <X size={17} />
           </button>
         </div>
 
         <p className="pmodal__note">
-          Créez votre portefeuille pour recevoir vos gains :
+          {t("modal.note")}
         </p>
 
         <ul className="pmodal__list">
-          {WALLET_LINK_METHODS.map((method) => (
+          {methods.map((method) => (
             <li key={method.id}>
               <a
                 href={method.referralUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="pmodal__item pmodal__item--link"
-                aria-label={`${method.name} — ouvrir dans un nouvel onglet`}
+                aria-label={t("modal.newTab", { name: method.name })}
                 onClick={() => trackWalletClick(method, "payment_methods_modal", method.referralUrl)}
               >
                 {method.logo ? (
@@ -109,7 +112,7 @@ export default function PaymentMethodsModal({ onClose }: { onClose: () => void }
         </ul>
 
         <button type="button" className="btn pmodal__close-btn" onClick={onClose}>
-          Fermer
+          {t("modal.close")}
         </button>
       </motion.div>
     </div>,

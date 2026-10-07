@@ -1,42 +1,45 @@
 import { motion } from "motion/react";
-import { Layers, UserPlus, ListChecks, Gift } from "lucide-react";
+import { Layers, UserPlus, ListChecks, Gift, type LucideIcon } from "lucide-react";
 import FadeIn from "./FadeIn";
+import { useLanguage } from "../hooks/useLanguage";
+import type { TranslationKey } from "../i18n/fr";
 
-const steps = [
+const steps: { icon: LucideIcon; title: TranslationKey; text: TranslationKey }[] = [
   {
     icon: Layers,
-    title: "Choisissez une plateforme",
-    text: "Parcourez la liste et sélectionnez celle qui correspond à vos envies.",
+    title: "how.s1.title",
+    text: "how.s1.text",
   },
   {
     icon: UserPlus,
-    title: "Inscrivez-vous avec mon lien",
-    text: "Créez votre compte sur la plateforme via le bouton dédié.",
+    title: "how.s2.title",
+    text: "how.s2.text",
   },
   {
     icon: ListChecks,
-    title: "Effectuez les tâches disponibles",
-    text: "Micro-tâches, sondages, offres : chaque plateforme propose ses missions.",
+    title: "how.s3.title",
+    text: "how.s3.text",
   },
   {
     icon: Gift,
-    title: "Recevez vos récompenses",
-    text: "Selon les conditions de chaque plateforme, cumulez vos gains.",
+    title: "how.s4.title",
+    text: "how.s4.text",
   },
 ];
 
 export default function HowItWorks() {
+  const { t } = useLanguage();
   return (
     <section id="comment-ca-marche" className="section">
       <div className="container">
         <FadeIn className="section__head">
           <span className="section__eyebrow">
             <ListChecks size={14} />
-            Guide
+            {t("how.eyebrow")}
           </span>
-          <h2 className="section__title">Comment ça marche ?</h2>
+          <h2 className="section__title">{t("how.title")}</h2>
           <p className="section__subtitle">
-            Quatre étapes simples pour commencer sur les plateformes présentées.
+            {t("how.subtitle")}
           </p>
         </FadeIn>
 
@@ -67,8 +70,8 @@ export default function HowItWorks() {
               <span className="step__icon" aria-hidden="true">
                 <step.icon size={22} />
               </span>
-              <h3 className="step__title">{step.title}</h3>
-              <p className="step__text">{step.text}</p>
+              <h3 className="step__title">{t(step.title)}</h3>
+              <p className="step__text">{t(step.text)}</p>
             </motion.li>
           ))}
         </motion.ol>

@@ -1,9 +1,11 @@
 import { AnimatePresence, motion } from "motion/react";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "../hooks/useTheme";
+import { useLanguage } from "../hooks/useLanguage";
 
 export default function ThemeToggle() {
   const { theme, toggle } = useTheme();
+  const { t } = useLanguage();
   const isDark = theme === "dark";
 
   return (
@@ -11,8 +13,8 @@ export default function ThemeToggle() {
       type="button"
       className="theme-toggle"
       onClick={toggle}
-      aria-label={isDark ? "Activer le mode clair" : "Activer le mode sombre"}
-      title={isDark ? "Passer en mode clair" : "Passer en mode sombre"}
+      aria-label={isDark ? t("theme.enableLight") : t("theme.enableDark")}
+      title={isDark ? t("theme.switchLight") : t("theme.switchDark")}
     >
       <span className="theme-toggle__track">
         <motion.span

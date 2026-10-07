@@ -1,8 +1,12 @@
+import { useLanguage } from "../../hooks/useLanguage";
+
 /** Sommaire du guide : navigation par ancres avec scroll fluide. */
 export default function GuideToc({ items }: { items: { id: string; label: string }[] }) {
+  const { t } = useLanguage();
+
   return (
-    <nav className="gtoc" aria-label="Sommaire du guide">
-      <span className="gtoc__label">Sommaire</span>
+    <nav className="gtoc" aria-label={t("toc.aria")}>
+      <span className="gtoc__label">{t("toc.label")}</span>
       <ol className="gtoc__list">
         {items.map((item, i) => (
           <li key={item.id}>

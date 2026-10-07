@@ -5,8 +5,12 @@ import { ArrowRight, Check, CreditCard, Smartphone, Info } from "lucide-react";
 import type { Platform } from "../data/platforms";
 import { trackReferralClick } from "../lib/analytics";
 import PaymentMethodsModal from "./PaymentMethodsModal";
+import { useLanguage } from "../hooks/useLanguage";
+import { localizePlatform } from "../i18n/localize";
 
-export default function MobileAppCard({ platform }: { platform: Platform }) {
+export default function MobileAppCard({ platform: raw }: { platform: Platform }) {
+  const { lang, t } = useLanguage();
+  const platform = localizePlatform(raw, lang);
   const [logoError, setLogoError] = useState(false);
   const [showPayments, setShowPayments] = useState(false);
   const hasLink = Boolean(platform.referralUrl);
@@ -29,7 +33,7 @@ export default function MobileAppCard({ platform }: { platform: Platform }) {
           ) : (
             <img
               src={platform.logo ?? undefined}
-              alt={`Logo ${platform.name}`}
+              alt={t("card.logoAlt", { name: platform.name })}
               className="pcard__logo-img"
               loading="lazy"
               onError={() => setLogoError(true)}
@@ -73,12 +77,12 @@ export default function MobileAppCard({ platform }: { platform: Platform }) {
         className="pcard__payments"
         onClick={() => setShowPayments(true)}
         aria-haspopup="dialog"
-        aria-label={`Voir les méthodes de paiement de ${platform.name}`}
+        aria-label={t("card.paymentsAria", { name: platform.name })}
         whileHover={{ scale: 1.01 }}
         whileTap={{ scale: 0.98 }}
       >
         <CreditCard size={14} aria-hidden="true" />
-        Méthodes de paiement
+        {t("card.payments")}
       </motion.button>
 
       <AnimatePresence>
@@ -93,27 +97,27 @@ export default function MobileAppCard({ platform }: { platform: Platform }) {
           target="_blank"
           rel="noopener noreferrer"
           className="btn btn--primary mcard__cta"
-          aria-label={`Commencer à gagner avec ${platform.name} (nouvel onglet)`}
+          aria-label={t("card.startAria", { name: platform.name })}
           onClick={() => trackReferralClick(platform, "mobile_app_card", platform.referralUrl)}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.97 }}
         >
-          Commencer à gagner
+          {t("cta.start")}
           <ArrowRight size={16} />
         </motion.a>
       ) : (
         <button type="button" className="btn mcard__cta mcard__cta--disabled" disabled>
-          Bientôt disponible
+          {t("cta.soon")}
         </button>
       )}
 
       <Link
         to={`/platforms/${platform.id}`}
         className="pcard__about"
-        aria-label={`En savoir plus sur ${platform.name}`}
+        aria-label={t("card.aboutAria", { name: platform.name })}
       >
         <Info size={14} />
-        À propos
+        {t("card.about")}
       </Link>
     </motion.article>
   );

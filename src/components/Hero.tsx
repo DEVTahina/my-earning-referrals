@@ -1,9 +1,12 @@
 import { motion } from "motion/react";
 import { Rocket, Compass, Globe, Smartphone } from "lucide-react";
+import { useLanguage } from "../hooks/useLanguage";
 
 const easeOut = [0.21, 0.65, 0.36, 1] as const;
 
 export default function Hero() {
+  const { t } = useLanguage();
+
   const scrollToPlatforms = () => {
     document.getElementById("plateformes")?.scrollIntoView({ behavior: "smooth" });
   };
@@ -36,8 +39,8 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.08, ease: easeOut }}
           >
-            Découvrez des plateformes pour{" "}
-            <span className="hero__title-accent">gagner en ligne</span>
+            {t("hero.title")}{" "}
+            <span className="hero__title-accent">{t("hero.titleAccent")}</span>
           </motion.h1>
 
           <motion.p
@@ -46,8 +49,7 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.16, ease: easeOut }}
           >
-            Micro-tâches, sondages, rewards et applications : trouvez des
-            plateformes adaptées à vos besoins et commencez simplement.
+            {t("hero.subtitle")}
           </motion.p>
 
           <motion.div
@@ -64,7 +66,7 @@ export default function Hero() {
               whileTap={{ scale: 0.97 }}
             >
               <Rocket size={18} />
-              Commencer à gagner
+              {t("cta.start")}
             </motion.button>
             <motion.a
               href="#plateformes"
@@ -73,7 +75,7 @@ export default function Hero() {
               whileTap={{ scale: 0.97 }}
             >
               <Compass size={18} />
-              Voir les plateformes
+              {t("cta.seePlatforms")}
             </motion.a>
           </motion.div>
 
@@ -83,7 +85,7 @@ export default function Hero() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            Accès gratuit • Liens de présentation • Aucune inscription sur ce site
+            {t("hero.note")}
           </motion.p>
         </div>
 

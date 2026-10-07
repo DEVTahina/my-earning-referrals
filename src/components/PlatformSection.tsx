@@ -3,8 +3,10 @@ import { Globe } from "lucide-react";
 import { platforms } from "../data/platforms";
 import PlatformCard from "./PlatformCard";
 import FadeIn from "./FadeIn";
+import { useLanguage } from "../hooks/useLanguage";
 
 export default function PlatformSection() {
+  const { t } = useLanguage();
   const websites = platforms.filter((p) => p.category === "website");
 
   return (
@@ -15,9 +17,9 @@ export default function PlatformSection() {
             <Globe size={14} />
             Web
           </span>
-          <h2 className="section__title">Plateformes Web</h2>
+          <h2 className="section__title">{t("web.title")}</h2>
           <p className="section__subtitle">
-            Découvrez différentes plateformes accessibles depuis votre navigateur.
+            {t("web.subtitle")}
           </p>
         </FadeIn>
 

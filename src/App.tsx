@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import PlatformDetails from "./pages/PlatformDetails";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import { LanguageProvider } from "./hooks/useLanguage";
 import { trackPageView } from "./lib/analytics";
 
 function ScrollToTop() {
@@ -42,15 +43,17 @@ function GuidePage() {
 export default function App() {
   return (
     <MotionConfig reducedMotion="user">
-      <BrowserRouter>
+      <LanguageProvider>
+        <BrowserRouter>
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/platforms/:id" element={<GuidePage />} />
           <Route path="*" element={<Home />} />
         </Routes>
-        <AnalyticsRouteTracker />
-      </BrowserRouter>
+          <AnalyticsRouteTracker />
+        </BrowserRouter>
+      </LanguageProvider>
     </MotionConfig>
   );
 }

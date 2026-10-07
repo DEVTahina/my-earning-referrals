@@ -2,15 +2,18 @@ import { useEffect, useState } from "react";
 import { Menu, X, Rocket, Zap } from "lucide-react";
 import { siteConfig } from "../data/platforms";
 import ThemeToggle from "./ThemeToggle";
-
-const navLinks = [
-  { label: "Accueil", href: "#accueil" },
-  { label: "Plateformes", href: "#plateformes" },
-  { label: "Applications", href: "#applications" },
-  { label: "Comment ça marche", href: "#comment-ca-marche" },
-];
+import LanguageToggle from "./LanguageToggle";
+import { useLanguage } from "../hooks/useLanguage";
 
 export default function Header() {
+  const { t } = useLanguage();
+  const navLinks = [
+    { label: t("nav.home"), href: "#accueil" },
+    { label: t("nav.platforms"), href: "#plateformes" },
+    { label: t("nav.apps"), href: "#applications" },
+    { label: t("nav.how"), href: "#comment-ca-marche" },
+  ];
+
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -30,7 +33,7 @@ export default function Header() {
           {siteConfig.name}
         </a>
 
-        <nav className="header__nav" aria-label="Navigation principale">
+        <nav className="header__nav" aria-label={t("nav.ariaMain")}>
           {navLinks.map((link) => (
             <a key={link.href} href={link.href} className="header__link">
               {link.label}
@@ -39,17 +42,18 @@ export default function Header() {
         </nav>
 
         <div className="header__actions">
+          <LanguageToggle />
           <ThemeToggle />
           <a href="#plateformes" className="btn btn--primary btn--sm header__cta">
             <Rocket size={16} />
-            Commencer à gagner
+            {t("cta.start")}
           </a>
         </div>
 
         <button
           type="button"
           className="header__burger"
-          aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
+          aria-label={open ? t("menu.close") : t("menu.open")}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
         >
@@ -58,7 +62,7 @@ export default function Header() {
       </div>
 
       {open && (
-        <nav className="header__mobile" aria-label="Navigation mobile">
+        <nav className="header__mobile" aria-label={t("nav.ariaMobile")}>
           {navLinks.map((link) => (
             <a
               key={link.href}
@@ -70,6 +74,7 @@ export default function Header() {
             </a>
           ))}
           <div className="header__mobile-row">
+            <LanguageToggle />
             <ThemeToggle />
             <a
               href="#plateformes"
@@ -77,7 +82,7 @@ export default function Header() {
               onClick={() => setOpen(false)}
             >
               <Rocket size={18} />
-              Commencer à gagner
+              {t("cta.start")}
             </a>
           </div>
         </nav>

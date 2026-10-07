@@ -1,15 +1,18 @@
 import { motion } from "motion/react";
 import { Globe, Smartphone, MousePointerClick, Sparkles } from "lucide-react";
 import { platforms } from "../data/platforms";
+import { useLanguage } from "../hooks/useLanguage";
+import type { TranslationKey } from "../i18n/fr";
 
-const stats = [
-  { icon: Sparkles, label: "plateformes disponibles" },
-  { icon: Globe, label: "accessibles via navigateur" },
-  { icon: Smartphone, label: "applications mobiles" },
-  { icon: MousePointerClick, label: "accès simple, sans inscription ici" },
+const stats: { icon: typeof Globe; label: TranslationKey }[] = [
+  { icon: Sparkles, label: "stats.platforms" },
+  { icon: Globe, label: "stats.web" },
+  { icon: Smartphone, label: "stats.mobile" },
+  { icon: MousePointerClick, label: "stats.access" },
 ];
 
 export default function StatsSection() {
+  const { t } = useLanguage();
   const total = platforms.length;
   const websites = platforms.filter((p) => p.category === "website").length;
   const mobile = platforms.filter((p) => p.category === "mobile").length;
@@ -17,7 +20,7 @@ export default function StatsSection() {
   const values = [`${total}+`, `${websites}`, `${mobile}`, "100%"];
 
   return (
-    <section className="stats" aria-label="Introduction">
+    <section className="stats" aria-label={t("stats.aria")}>
       <div className="container">
         <motion.div
           className="stats__grid"
@@ -44,7 +47,7 @@ export default function StatsSection() {
             >
               <stat.icon size={22} className="stats__icon" />
               <span className="stats__value">{values[i]}</span>
-              <span className="stats__label">{stat.label}</span>
+              <span className="stats__label">{t(stat.label)}</span>
             </motion.div>
           ))}
         </motion.div>
