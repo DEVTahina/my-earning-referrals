@@ -422,6 +422,31 @@ p {
     linear-gradient(to bottom, #fc3d32 0 50%, #007e3a 50% 100%);
 }
 
+/* ---------- Capture d'écran de guide ---------- */
+
+.gshot {
+  margin: 14px 0 0;
+  max-width: 234px;
+}
+
+.gshot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+}
+
+.gshot__caption {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--text-muted);
+  text-align: center;
+}
+
 /* ---------- Hero ---------- */
 
 .hero {
