@@ -6,6 +6,8 @@ export interface GuideSource {
 export interface GuideSubStep {
   title: string;
   description: string;
+  /** Capture d'écran illustrant la sous-étape (facultatif). */
+  image?: GuideImage;
 }
 
 export interface GuideBlock {
@@ -13,6 +15,17 @@ export interface GuideBlock {
   description: string;
   /** Sous-étapes détaillées (facultatif). */
   steps?: GuideSubStep[];
+  /** Capture d'écran illustrant le bloc (facultatif). */
+  image?: GuideImage;
+}
+
+/** Capture d'écran d'un guide : image locale + légende (affichée en alt et en légende). */
+export interface GuideImage {
+  src: string;
+  caption: string;
+  /** Dimensions naturelles de l'image (évite les sauts de mise en page). */
+  width?: number;
+  height?: number;
 }
 
 export interface GuideStep {
@@ -21,6 +34,8 @@ export interface GuideStep {
   description: string;
   /** Conseils courts attaches à l'étape. */
   tips?: string[];
+  /** Capture d'écran illustrant l'étape (facultatif). */
+  image?: GuideImage;
 }
 
 export interface GuideFaq {
@@ -85,7 +100,7 @@ export interface PlatformGuide {
   /** Comment gagner plus (sans promesse de gain). */
   tips?: string[];
   /** Programme de referral officiel. */
-  referral?: { description: string };
+  referral?: { description: string; image?: GuideImage };
   /** FAQ spécifique. */
   faq?: GuideFaq[];
   /** "partial" = documentation officielle limitée (guide volontairement prudent). */
