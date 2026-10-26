@@ -1,5 +1,6 @@
 import { ChevronDown } from "lucide-react";
 import type { GuideBlock } from "../../data/guides";
+import GuideShot from "./GuideShot";
 
 /**
  * Méthodes de gain en accordéon (le premier bloc est ouvert par défaut).
@@ -20,6 +21,7 @@ export default function GuideAccordion({ blocks }: { blocks: GuideBlock[] }) {
           </summary>
           <div className="gaccordion__body">
             <p className="gaccordion__text">{b.description}</p>
+            {b.image && <GuideShot image={b.image} />}
             {b.steps && b.steps.length > 0 && (
               <ol className="gaccordion__steps">
                 {b.steps.map((s, index) => (
@@ -30,6 +32,7 @@ export default function GuideAccordion({ blocks }: { blocks: GuideBlock[] }) {
                     <div>
                       <p className="gaccordion__step-title">{s.title}</p>
                       <p className="gaccordion__step-text">{s.description}</p>
+                      {s.image && <GuideShot image={s.image} />}
                     </div>
                   </li>
                 ))}
