@@ -24,6 +24,7 @@ import GuideAccordion from "../components/guide/GuideAccordion";
 import GuideSteps from "../components/guide/GuideSteps";
 import GuideFaqList from "../components/guide/GuideFaqList";
 import GuideCallouts from "../components/guide/GuideCallouts";
+import GuideShot from "../components/guide/GuideShot";
 import { usePageMeta } from "../hooks/usePageMeta";
 import { trackReferralClick } from "../lib/analytics";
 import { useLanguage } from "../hooks/useLanguage";
@@ -226,6 +227,7 @@ export default function PlatformDetails() {
                 step: i + 1,
                 title: s.title,
                 description: s.description,
+                image: s.image,
               }))}
             />
           )}
@@ -336,6 +338,7 @@ export default function PlatformDetails() {
               <Sparkles size={18} aria-hidden="true" /> {t("s.referral.title")}
             </h2>
             <p className="gsection__text">{g.referral.description}</p>
+            {g.referral.image && <GuideShot image={g.referral.image} />}
           </>
         ),
       });
