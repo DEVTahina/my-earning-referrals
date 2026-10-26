@@ -1,4 +1,5 @@
 import type { GuideStep } from "../../data/guides";
+import GuideShot from "./GuideShot";
 
 /** Liste d'étapes numérotées réutilisable (inscription, guide A→Z…). */
 export default function GuideSteps({ steps }: { steps: GuideStep[] }) {
@@ -12,6 +13,7 @@ export default function GuideSteps({ steps }: { steps: GuideStep[] }) {
           <div className="gsteps__body">
             <h4 className="gsteps__title">{s.title}</h4>
             <p className="gsteps__text">{s.description}</p>
+            {s.image && <GuideShot image={s.image} />}
             {s.tips && s.tips.length > 0 && (
               <ul className="gsteps__tips">
                 {s.tips.map((tip) => (
