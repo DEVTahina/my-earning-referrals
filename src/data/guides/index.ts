@@ -30,6 +30,7 @@ export type {
   GuideMistake,
   GuideSource,
   GuideWithdrawal,
+  GuideImage,
   CalloutTone,
 } from "./types";
 export { GUIDES_LAST_VERIFIED } from "./types";
